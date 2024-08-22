@@ -1,0 +1,4 @@
+.venv
+.idea
+typings
+.DS_Store
