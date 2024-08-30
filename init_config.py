@@ -1,7 +1,7 @@
 
 config = [
-    {"name": "X_POINT", "description": "", "init_value": 1, "min_value": 90, "max_value": 130},
-    {"name": "Y_POINT", "description": "", "init_value": 1, "min_value": 70, "max_value": 110},
+    {"name": "X_POINT", "description": "", "init_value": 90, "min_value": 90, "max_value": 130},
+    {"name": "Y_POINT", "description": "", "init_value": 70, "min_value": 70, "max_value": 110},
     # {"name": "SOCKET_IP", "description": "", "init_value": "0.0.0.0"},
     {"name": "SOCKET_PORT", "description": "", "init_value": 5000, "min_value": 1024, "max_value": 65535},
     {"name": "SOCKET_PARALEL", "description": "", "init_value": 1, "min_value": 1, "max_value": 10},
