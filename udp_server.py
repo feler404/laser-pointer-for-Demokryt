@@ -20,11 +20,11 @@ def update_state_machine(raw_data):
     global STATE
     try:
         data = json.loads(raw_data.decode('utf-8'))
-        x = data.get(STATE['X_POINT'].name, STATE['X_POINT'].value)
-        y = data.get(STATE['Y_POINT'].name, STATE['Y_POINT'].value)
+        STATE['X_POINT'].value = data.get(STATE['X_POINT'].name, STATE['X_POINT'].value)
+        STATE['Y_POINT'].value = data.get(STATE['Y_POINT'].name, STATE['Y_POINT'].value)
 
-        sliderX_changed(x)
-        sliderY_changed(y)
+        sliderX_changed(STATE['X_POINT'].value)
+        sliderY_changed(STATE['Y_POINT'].value)
         return "OK"
     except Exception as e:
         msg = "Błąd podczas parsowania danych: %s" % e

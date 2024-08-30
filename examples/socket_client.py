@@ -10,7 +10,7 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((server_ip, server_port))
 
 # Wysłanie wiadomości do serwera echo
-message = {"X_POINT": 90, "Y_POINT": 100}
+message = {"X_POINT": 90, "Y_POINT": 50}
 message = json.dumps(message)
 client_socket.send(message.encode('utf-8'))
 
