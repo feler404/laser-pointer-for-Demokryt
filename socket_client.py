@@ -1,4 +1,5 @@
 import socket
+import json
 
 # Ustawienia serwera
 server_ip = '192.168.1.102'  # Zastąp adresem IP mikrokontrolera
@@ -9,7 +10,8 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((server_ip, server_port))
 
 # Wysłanie wiadomości do serwera echo
-message = "Hello, M5Stack!"
+message = {"x": 120, "y": 120}
+message = json.dumps(message)
 client_socket.send(message.encode('utf-8'))
 
 # Otrzymanie odpowiedzi z serwera (echo)
