@@ -1,6 +1,5 @@
-from udp_server import *
-from ui_flow import *
+from ui_flow import main
+from init_config import STATE
 
 
-
-main()
+main(STATE)

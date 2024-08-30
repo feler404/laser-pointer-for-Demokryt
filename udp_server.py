@@ -2,36 +2,37 @@ import socket
 import json
 
 
-global MAIN_SOCKET, X_VALUE, Y_VALUE
+global MAIN_SOCKET, STATE
 
 
-def init_udp_server(*args, **kwargs):
-    global MAIN_SOCKET, X_VALUE, Y_VALUE
-    X_VALUE = kwargs.get('X_VALUE', 0)
-    Y_VALUE = kwargs.get('Y_VALUE', 0)
-    SOCKET_IP = kwargs.get('IP_SOCKET', '0.0.0.0')
-    SOCKET_PORT = kwargs.get('SOCKET_PORT', 5000)
-    SOCKET_PARALEL = kwargs.get('SOCKET_PARALEL', 1)
+def init_udp_server(STATE):
+    global MAIN_SOCKET
+    ip_socket = STATE['IP_SOCKET'].value
+    socket_port = STATE['SOCKET_PORT'].value
+    socket_paralel = STATE['SOCKET_PARALEL'].value
     MAIN_SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    MAIN_SOCKET.bind((SOCKET_IP, SOCKET_PORT))
-    MAIN_SOCKET.listen(SOCKET_PARALEL)
-    print("Serwer echo działa na porcie 5000")
+    MAIN_SOCKET.bind((ip_socket, socket_port))
+    MAIN_SOCKET.listen(socket_paralel)
+    print("Serwer nasłuchuje na porcie:", socket_port)
 
 
 def update_state_machine(raw_data):
-    global X_VALUE, Y_VALUE
+    from ui_flow import sliderX_changed, sliderY_changed
+    global STATE
     try:
         data = json.loads(raw_data.decode('utf-8'))
     except Exception as e:
         print("Błąd podczas parsowania danych:", e)
         return None
 
-    X_VALUE = data.get('x', X_VALUE)
-    Y_VALUE = data.get('y', Y_VALUE)
+    STATE['X_POINT'].value = data.get(STATE['X_POINT'].name, STATE['X_POINT'].value)
+    STATE['Y_POINT'].value = data.get(STATE['Y_POINT'].name, STATE['Y_POINT'].value)
+    sliderX_changed(STATE['X_POINT'].value)
+    sliderY_changed(STATE['Y_POINT'].value)
 
 
 def spin_udp_server():
-    global MAIN_SOCKET
+    global MAIN_SOCKET, STATE
     try:
         while True:
             print("Oczekiwanie na połączenie...")
@@ -46,6 +47,9 @@ def spin_udp_server():
                     break
 
                 print("Otrzymano:", raw_data.decode('utf-8'))
+
+                #echo_srt = " Old data: x={} y={}".format(STATE['X_POINT'].value, STATE['Y_POINT'].value)
+                #echo_data = bytes(echo_srt, 'utf-8')
                 update_state_machine(raw_data)
                 client_socket.send(raw_data)
 
