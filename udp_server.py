@@ -7,13 +7,13 @@ global MAIN_SOCKET, STATE
 
 def init_udp_server(STATE):
     global MAIN_SOCKET
-    ip_socket = STATE['IP_SOCKET'].value
+    socker_ip = "0.0.0.0" #STATE['SOCKET_IP'].value
     socket_port = STATE['SOCKET_PORT'].value
     socket_paralel = STATE['SOCKET_PARALEL'].value
     MAIN_SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    MAIN_SOCKET.bind((ip_socket, socket_port))
+    MAIN_SOCKET.bind((socker_ip, socket_port))
     MAIN_SOCKET.listen(socket_paralel)
-    print("Serwer nasłuchuje na porcie:", socket_port)
+    #print("Serwer nasłuchuje na porcie:", socket_port)
 
 
 def update_state_machine(raw_data):
