@@ -28,6 +28,7 @@ sliderY = M5Slider(x=10, y=106, w=300, h=12, min=Y_MIN, max=Y_MAX, bg_c=0xa0a0a0
 
 
 def sliderX_changed(value):
+    sliderX.set_value(value)
     servo2.position(0, value)
     label_servo_x_value.set_text(str(value))
     pass
@@ -37,7 +38,7 @@ sliderX.changed(sliderX_changed)
 
 
 def sliderY_changed(value):
-    slider1.set_value(value)
+    sliderY.set_value(value)
     servo2.position(2, value)
     label_servo_y_value.set_text(str(value))
     pass
@@ -91,6 +92,6 @@ def main():
     label_timer.set_align(ALIGN_IN_TOP_LEFT, x=0, y=0, ref=screen.obj)
     print('Start')
 
-    from udp_server import init_udp_server, spin_udp_server, X_VALUE, Y_VALUE
+    from udp_server import init_udp_server, spin_udp_server
     init_udp_server(X_VALUE=X_MIN, Y_VALUE=Y_MIN)
     spin_udp_server()

@@ -15,7 +15,7 @@ message = json.dumps(message)
 client_socket.send(message.encode('utf-8'))
 
 # Otrzymanie odpowiedzi z serwera (echo)
-data = client_socket.recv(1024)
-print("Otrzymano z serwera:", data.decode('utf-8'))
+#data = client_socket.recv(1024)
+#print("Otrzymano z serwera:", data.decode('utf-8'))
 
 client_socket.close()
