@@ -94,4 +94,3 @@ def main():
     from udp_server import init_udp_server, spin_udp_server, X_VALUE, Y_VALUE
     init_udp_server(X_VALUE=X_MIN, Y_VALUE=Y_MIN)
     spin_udp_server()
-

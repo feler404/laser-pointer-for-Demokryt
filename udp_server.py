@@ -53,4 +53,4 @@ def spin_udp_server():
     except Exception as e:
         print("Wystąpił błąd:", e)
     finally:
-        server_socket.close()
+        MAIN_SOCKET.close()
