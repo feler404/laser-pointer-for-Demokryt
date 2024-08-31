@@ -73,7 +73,7 @@ class Logger:
 
     def get_time(self):
         if self.time_nf:
-            return self.time_nf(':')
+            return str(self.time_nf())
         else:
             return "00:00:00"
 

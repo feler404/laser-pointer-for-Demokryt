@@ -3,7 +3,6 @@ from m5stack_ui import *
 from uiflow import *
 import module
 import network
-import ntptime
 import wifiCfg
 
 
@@ -37,6 +36,11 @@ sliderX = M5Slider(x=10, y=54, w=300, h=12, min=X_MIN, max=X_MAX, bg_c=0xa0a0a0,
 sliderY = M5Slider(x=10, y=106, w=300, h=12, min=Y_MIN, max=Y_MAX, bg_c=0xa0a0a0, color=0x08A2B0, parent=None)
 
 
+def buttonA_wasPressed():
+  label_timer.set_text(get_time_string())
+btnA.wasPressed(buttonA_wasPressed)
+
+
 def sliderX_changed(value):
     sliderX.set_value(value)
     servo2.position(0, value)
@@ -56,14 +60,17 @@ def sliderY_changed(value):
 sliderY.changed(sliderY_changed)
 
 
+def get_time_string():
+    msg = rtc.datetime()  # (year, month, day, hours, minutes, seconds)
+    data_time = "%04d-%02d-%02d %02d:%02d:%02d" % (msg[0], msg[1], msg[2], msg[4], msg[5], msg[6])
+    return data_time
+
+
 def callback_lcd_clock(_arg):
-    global ntp
-    # label_timer.set_text(str(ntp.formatDatetime('-', ':')))  # 2021-06-01 14:12:23 - laguje na kilka sekund
-    label_timer.set_text("Local Time: " + str(ntp.formatTime(':')))
+    label_timer.set_text(get_time_string())
 
 
 def sync_ntp(_arg):
-    global ntp
     pass
 
 
@@ -82,16 +89,16 @@ screen.set_screen_brightness(screen_light_mode)
 wifiCfg.doConnect(STATE['WIFI_SID'], STATE['WIFI_PASS'])
 
 wlan = network.WLAN(network.STA_IF)
-ntp = ntptime.client(host=NTP_SERVER, timezone=TIME_ZONE)
+rtc.settime('ntp', host=NTP_SERVER, tzone=TIME_ZONE)
 timerSch.timer.init(period=1000, mode=timerSch.timer.PERIODIC, callback=callback_lcd_clock)
 label_timer.set_align(ALIGN_IN_TOP_LEFT, x=0, y=0, ref=screen.obj)
 label_ip.set_align(ALIGN_IN_TOP_MID, x=30, y=0, ref=screen.obj)
 label_ip.set_text("IP: " + str(wlan.ifconfig())[2:15])
 label_log_0.set_long_mode(3)
-label_log_0.set_size(w=320)
 label_log_1.set_long_mode(3)
-label_log_1.set_size(w=320)
 label_log_2.set_long_mode(3)
+label_log_0.set_size(w=320)
+label_log_1.set_size(w=320)
 label_log_2.set_size(w=320)
 sliderX_changed(STATE['X_POINT'].value)
 sliderY_changed(STATE['Y_POINT'].value)
@@ -107,4 +114,4 @@ def screen_log(msg):
     label_log_2.set_text(log_list[2])
 
 
-lcd_logger = Logger(time_nf=ntp.formatTime, log_nf=screen_log)
+lcd_logger = Logger(time_nf=get_time_string, log_nf=screen_log)
