@@ -24,14 +24,15 @@ class IntParam:
     def __repr__(self):
         return "%s=%d" % (self.name, self.value)
 
-    def __setattr__(self, key, value):
-        if key == 'value':
-            value = int(value)
-            if value < self.min:
-                value = self.min
-            elif value > self.max:
-                value = self.max
-        super().__setattr__(key, value)
+    # def __setattr__(self, key, value):  # Nie działa dla micropython
+
+    def set(self, value):
+        value = int(value)
+        if value < self.min:
+            value = self.min
+        elif value > self.max:
+            value = self.max
+        self.value = value
 
 
 class StrParam:
@@ -64,4 +65,37 @@ def init_param(**param_config):
         raise ValueError("Nieobsługiwany typ wartości początkowej parametru: %s" % type(value))
 
 
+class Logger:
+
+    def __init__(self, time_nf=None, log_nf=None):
+        self.time_nf = time_nf
+        self.log_nf = log_nf
+
+    def get_time(self):
+        if self.time_nf:
+            return self.time_nf(':')
+        else:
+            return "00:00:00"
+
+    def propagate_log(self, log):
+        if self.log_nf:
+            self.log_nf(log)
+        print(log)
+
+    def log(self, message, level="INFO"):
+        time = self.get_time()
+        log = "%s [%s]: %s" % (time, level, message)
+        self.propagate_log(log)
+
+    def info(self, message):
+        self.log(message, "INFO")
+
+    def warning(self, message):
+        self.log(message, "WARNING")
+
+    def error(self, message):
+        self.log(message, "ERROR")
+
+
 STATE = {param['name']: init_param(**param) for param in config}
+logger = Logger()
