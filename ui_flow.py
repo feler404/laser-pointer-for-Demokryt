@@ -58,7 +58,8 @@ sliderY.changed(sliderY_changed)
 
 def callback_lcd_clock(_arg):
     global ntp
-    label_timer.set_text(str(ntp.formatDatetime('-', ':')))
+    # label_timer.set_text(str(ntp.formatDatetime('-', ':')))
+    label_timer.set_text(str(ntp.formatTime(':')))
 
 
 def sync_ntp(_arg):
