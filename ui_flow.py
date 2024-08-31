@@ -23,7 +23,7 @@ Y_MIN = STATE['Y_POINT'].min
 Y_MAX = STATE['Y_POINT'].max
 
 label_timer = M5Label('14:12:23', x=0, y=0, color=0x000, font=FONT_MONT_14, parent=None)
-label_ip = M5Label('---', x=280, y=0, color=0x000, font=FONT_MONT_14, parent=None)
+label_ip = M5Label('---', x=0, y=0, color=0x000, font=FONT_MONT_14, parent=None)
 label_log_0 = M5Label('---', x=0, y=218, color=0x000, font=FONT_MONT_14, parent=None)
 label_log_1 = M5Label('---', x=0, y=202, color=0x000, font=FONT_MONT_14, parent=None)
 label_log_2 = M5Label('---', x=0, y=186, color=0x000, font=FONT_MONT_14, parent=None)
@@ -54,9 +54,14 @@ def sliderY_changed(value):
 sliderY.changed(sliderY_changed)
 
 
-def callback_timer3(_arg):
+def callback_lcd_clock(_arg):
     global ntp
     label_timer.set_text(str(ntp.formatDatetime('-', ':')))
+
+
+def sync_ntp(_arg):
+    global ntp
+    pass
 
 
 def button_switch_light_pressed():
@@ -74,9 +79,9 @@ screen.set_screen_brightness(screen_light_mode)
 wlan = network.WLAN(network.STA_IF)
 print(wlan.ifconfig())
 ntp = ntptime.client(host=NTP_SERVER, timezone=TIME_ZONE)
-timerSch.timer.init(period=1000, mode=timerSch.timer.PERIODIC, callback=callback_timer3)
+timerSch.timer.init(period=1000, mode=timerSch.timer.PERIODIC, callback=callback_lcd_clock)
 label_timer.set_align(ALIGN_IN_TOP_LEFT, x=0, y=0, ref=screen.obj)
-label_ip.set_align(ALIGN_IN_TOP_MID, x=0, y=0, ref=screen.obj)
+label_ip.set_align(ALIGN_IN_TOP_MID, x=30, y=0, ref=screen.obj)
 label_ip.set_text("IP: " + str(wlan.ifconfig())[2:15])
 label_log_0.set_long_mode(3)
 label_log_0.set_size(w=320)
