@@ -4,6 +4,8 @@ from uiflow import *
 import module
 import network
 import ntptime
+import wifiCfg
+
 
 from init_config import STATE, Logger
 
@@ -76,8 +78,9 @@ def button_switch_light_pressed():
 
 
 screen.set_screen_brightness(screen_light_mode)
+wifiCfg.doConnect(STATE['WIFI_SID'], STATE['WIFI_PASS'])
+
 wlan = network.WLAN(network.STA_IF)
-print(wlan.ifconfig())
 ntp = ntptime.client(host=NTP_SERVER, timezone=TIME_ZONE)
 timerSch.timer.init(period=1000, mode=timerSch.timer.PERIODIC, callback=callback_lcd_clock)
 label_timer.set_align(ALIGN_IN_TOP_LEFT, x=0, y=0, ref=screen.obj)

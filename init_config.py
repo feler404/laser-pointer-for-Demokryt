@@ -98,4 +98,6 @@ class Logger:
 
 
 STATE = {param['name']: init_param(**param) for param in config}
+STATE['WIFI_SID'] = 'DEMOKRYT3-ROS2-3A2'
+STATE['WIFI_PASS'] = '39005816'
 logger = Logger()
